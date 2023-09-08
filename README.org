@@ -1,0 +1,6 @@
+# Usage
+
+#+begin_src bash
+python setup install
+python test.py
+#+end_src
