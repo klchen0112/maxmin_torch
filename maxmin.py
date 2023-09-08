@@ -6,8 +6,5 @@ import torch
 import maxmin_cuda
 
 
-
-def own_max_min(input,maxT,minT):
-    return maxmin_cuda.forward(input, maxT,minT)
-
-
+def own_max_min(input, min, max):
+    return maxmin_cuda.own_max_min(input, min, max)

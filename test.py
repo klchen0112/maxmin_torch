@@ -1,31 +1,40 @@
 import torch
 import maxmin
+device = torch.device("cuda")
+a = torch.randint(300, size=(10,)).float().to(device)
 
-a = torch.randint(300,shape=(100))
 
+minV = torch.Tensor([10]).float().to(device)
+maxV = torch.Tensor([20]).float().to(device)
 
-minV = 10
-maxV = 20
+groud_truth = torch.clamp(a, min=minV, max=maxV)
 
-groud_truth = torch.clamp(a,min=minV,max=maxV)
+own = maxmin.own_max_min(a, min=minV, max=maxV)
 
-own  = maxmin.own_max_min(a,min=minV,max=maxV)
-
-if torch.reduce_mean(torch.abs(own - groud_truth)).item() > 10**(-5):
+if torch.mean(torch.abs(own - groud_truth)).item() > 10**(-5):
+    print(a)
+    print(own)
+    print(groud_truth)
+    print(torch.mean(torch.abs(own - groud_truth)))
     print("reduce single error")
     exit()
 
 
-a = torch.randint(300,shape=(100,100))
+a = torch.randint(300, size=(5, 5)).float().to(device)
 
-minV = torch.randint(300,shape=(100,))
-maxV = torch.randint(300,shape=(100,))
+minV = torch.randint(300, size=(5,)).float().to(device)
+maxV = torch.randint(300, size=(5,)).float().to(device)
 
-groud_truth = torch.clamp(a,min=minV,max=maxV)
+minV,maxV = torch.min(maxV,minV),torch.max(maxV,minV)
 
-own  = maxmin.own_max_min(a,min=minV,max=maxV)
+own = maxmin.own_max_min(a, min=minV, max=maxV)
 
 
-if torch.reduce_mean(torch.abs(own - groud_truth).flatten()).item() > 10**(-5):
-    print("reduce single error")
-    exit()
+
+print(a)
+print(minV)
+print(maxV)
+
+print(own)
+
+print("all pass")
